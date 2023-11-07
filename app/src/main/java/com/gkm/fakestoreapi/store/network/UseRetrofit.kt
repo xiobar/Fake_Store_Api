@@ -6,12 +6,12 @@ import kotlinx.coroutines.withContext
 
 class UseRetrofit {
 
-    val retorfit = RetorfitRes()
+    private val retrofit = RetorfitRes()
 
-    suspend fun getListStore(): StoreResponse {
+    suspend fun getListStore(): List<StoreResponse> {
         return withContext(Dispatchers.IO) {
-            val call = retorfit.getRetrofit().create(ApiServices::class.java).getStoreProducts()
-            call.body() ?: StoreResponse(0, "", 0.0, "", "")
+            val call = retrofit.getRetrofit().create(ApiServices::class.java).getStoreProducts()
+            call.body() ?: emptyList()
         }
     }
 }

@@ -6,7 +6,7 @@ class StoreRepository (){
 
     private val api = UseRetrofit()
 
-    suspend fun getStore():StoreResponse{
+    suspend fun getStore():List<StoreResponse>{
         return api.getListStore()
     }
 }

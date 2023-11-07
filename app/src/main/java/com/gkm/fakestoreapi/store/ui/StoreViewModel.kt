@@ -18,7 +18,7 @@ class StoreViewModel: ViewModel() {
         viewModelScope.launch {
             try{
                 val products = storeUseCase()
-                _getProducts.value = listOf(products)
+                _getProducts.value = products
             }catch (e:Exception){
                 throw e
             }
