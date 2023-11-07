@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.gkm.fakestoreapi.store.ui.StoreScreen
+import com.gkm.fakestoreapi.store.ui.StoreViewModel
 import com.gkm.fakestoreapi.ui.theme.FakeStoreApiTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FakeStoreApiTheme {
                 // A surface container using the 'background' color from the theme
-                StoreScreen()
+                StoreScreen(storeViewModel = StoreViewModel())
             }
         }
     }
@@ -23,5 +24,5 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    StoreScreen()
+    StoreScreen(storeViewModel = StoreViewModel())
 }

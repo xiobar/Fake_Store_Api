@@ -8,11 +8,10 @@ class UseRetrofit {
 
     val retorfit = RetorfitRes()
 
-    suspend fun getListStore(): List<StoreResponse> {
+    suspend fun getListStore(): StoreResponse {
         return withContext(Dispatchers.IO) {
             val call = retorfit.getRetrofit().create(ApiServices::class.java).getStoreProducts()
             call.body() ?: StoreResponse(0, "", 0.0, "", "")
-
         }
     }
 }
