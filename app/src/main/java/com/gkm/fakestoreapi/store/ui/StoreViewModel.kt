@@ -4,22 +4,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gkm.fakestoreapi.store.data.StoreResponse
 import com.gkm.fakestoreapi.store.data.StoreUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StoreViewModel: ViewModel() {
-    private val storeUseCase: StoreUseCase = StoreUseCase()
+@HiltViewModel
+class StoreViewModel @Inject constructor(
+    private val storeUseCase: StoreUseCase
+) : ViewModel() {
+
+    //private val storeUseCase: StoreUseCase = StoreUseCase()
 
     private val _getProducts = MutableStateFlow(emptyList<StoreResponse>())
-    val getProducts:StateFlow<List<StoreResponse>> = _getProducts
+    val getProducts: StateFlow<List<StoreResponse>> = _getProducts
 
-    fun listProducts(){
+    fun listProducts() {
         viewModelScope.launch {
-            try{
+            try {
                 val products = storeUseCase()
                 _getProducts.value = products
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 throw e
             }
         }

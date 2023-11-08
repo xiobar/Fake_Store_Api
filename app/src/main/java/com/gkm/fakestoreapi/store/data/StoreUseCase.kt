@@ -1,8 +1,10 @@
 package com.gkm.fakestoreapi.store.data
 
-class StoreUseCase {
+import javax.inject.Inject
 
-    private val repository = StoreRepository()
+class StoreUseCase @Inject constructor(private val repository: StoreRepository){
+
+    //private val repository = StoreRepository()
 
     suspend operator fun invoke():List<StoreResponse>{
         return repository.getStore()
