@@ -1,5 +1,6 @@
 package com.gkm.fakestoreapi.store.network
 
+import android.util.Log
 import com.gkm.fakestoreapi.store.data.StoreResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,9 +11,14 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
     //private val retrofit = RetorfitRes()
 
     suspend fun getListStore(): List<StoreResponse> {
-        return withContext(Dispatchers.IO) {
-            val call = apiServices.getStoreProducts()
-            call.body() ?: emptyList()
+        return try {
+            withContext(Dispatchers.IO) {
+                val call = apiServices.getStoreProducts()
+                call.body() ?: emptyList()
+            }
+        }catch (e:Exception){
+            Log.i("ErrorConnect", "Error al conectar: $e")
+            emptyList()
         }
     }
 }

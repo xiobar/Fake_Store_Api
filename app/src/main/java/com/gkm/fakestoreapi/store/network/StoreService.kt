@@ -23,7 +23,7 @@ class StoreService {
 
     @Singleton
     @Provides
-    fun getClient(retrofit: Retrofit):ApiServices{
+    fun getClient(retrofit: Retrofit): ApiServices {
         return retrofit.create(ApiServices::class.java)
     }
 }

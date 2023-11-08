@@ -1,5 +1,6 @@
 package com.gkm.fakestoreapi.store.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gkm.fakestoreapi.store.data.StoreResponse
@@ -26,7 +27,7 @@ class StoreViewModel @Inject constructor(
                 val products = storeUseCase()
                 _getProducts.value = products
             } catch (e: Exception) {
-                throw e
+                Log.e("ErrorList", "Error al obtener el listado: ", e)
             }
         }
     }
