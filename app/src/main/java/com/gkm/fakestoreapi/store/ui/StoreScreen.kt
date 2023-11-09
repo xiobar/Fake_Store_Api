@@ -20,10 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.gkm.fakestoreapi.store.data.StoreResponse
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StoreScreen(modifier: Modifier = Modifier, storeViewModel: StoreViewModel) {
+fun StoreScreen(modifier: Modifier = Modifier,
+                storeViewModel: StoreViewModel,
+                navigator: DestinationsNavigator) {
 
     val storeList = storeViewModel.getProducts.collectAsState(emptyList())
 
