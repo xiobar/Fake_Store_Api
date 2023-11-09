@@ -1,8 +1,6 @@
 package com.gkm.fakestoreapi.store.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,17 +23,13 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import com.gkm.fakestoreapi.store.ui.destinations.StoreScreenDestination
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,15 +40,19 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gkm.fakestoreapi.R
-import retrofit2.http.Body
+import com.gkm.fakestoreapi.store.ui.destinations.StoreScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @RootNavGraph(start = true)
 @Destination
 @Composable
 fun LoginScreen(
     navigator: DestinationsNavigator,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel = viewModel()
 ) {
     val isLoading by loginViewModel.loading.observeAsState(initial = true)
     Box(
@@ -78,6 +76,7 @@ fun LoginScreen(
                         .fillMaxWidth()
                         .weight(1f),
                     loginViewModel,
+                    navigator
                 )
                 Foot(
                     Modifier
@@ -93,7 +92,7 @@ fun LoginScreen(
 fun Foot(modifier: Modifier) {
     Box(modifier, contentAlignment = Alignment.Center) {
         Text(
-            text = stringResource(id = R.string.comentario),
+            text = stringResource(id = R.string.comment),
             modifier,
             textAlign = TextAlign.Center,
             color = Color(0xFF757575),
@@ -106,11 +105,12 @@ fun Foot(modifier: Modifier) {
 @Composable
 fun Body(
     modifier: Modifier,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    navigator: DestinationsNavigator
 ) {
     Box(modifier.fillMaxWidth()) {
         Column(Modifier.align(Alignment.Center)) {
-            LoginTextField(Modifier.fillMaxWidth(), loginViewModel)
+            LoginTextField(Modifier.fillMaxWidth(), loginViewModel, navigator)
         }
     }
 }
@@ -120,6 +120,7 @@ fun Body(
 fun LoginTextField(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
+    navigator: DestinationsNavigator,
 
     ) {
     val user: String by loginViewModel.user.observeAsState(initial = "")
@@ -212,6 +213,8 @@ fun LoginTextField(
         Button(
             onClick = {
                 loginViewModel.onLoginSelected()
+                navigator.navigate(StoreScreenDestination.route)
+
             },
             Modifier
                 .padding(top = 10.dp)

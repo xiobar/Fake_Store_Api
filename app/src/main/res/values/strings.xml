@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Fake Store Api</string>
+
+    <string name="comment">Prueba de login</string>
 </resources>
