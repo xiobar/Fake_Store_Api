@@ -39,14 +39,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gkm.fakestoreapi.R
-import com.gkm.fakestoreapi.store.ui.destinations.StoreScreenDestination
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.gkm.fakestoreapi.R
+import com.gkm.fakestoreapi.store.destinations.BuildNavGraphDestination
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@RootNavGraph(start = true)
+//@RootNavGraph(start = true)
 @Destination
 @Composable
 fun LoginScreen(
@@ -213,7 +212,7 @@ fun LoginTextField(
         Button(
             onClick = {
                 loginViewModel.onLoginSelected()
-                navigator.navigate(StoreScreenDestination.route)
+                navigator.navigate(BuildNavGraphDestination)
 
             },
             Modifier

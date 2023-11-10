@@ -93,8 +93,13 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //navRamcosta
-    val navVersion = "1.9.54"
+    /*val navVersion = "1.9.54"
     implementation("io.github.raamcosta.compose-destinations:core:$navVersion")
+    ksp("io.github.raamcosta.compose-destinations:ksp:$navVersion")*/
+
+    //navRamvosta Animation
+    val navVersion="1.9.54"
+    implementation("io.github.raamcosta.compose-destinations:animations-core:$navVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$navVersion")
 }
 
