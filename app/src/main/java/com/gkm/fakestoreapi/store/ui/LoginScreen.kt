@@ -43,9 +43,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gkm.fakestoreapi.R
 import com.gkm.fakestoreapi.store.destinations.BuildNavGraphDestination
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-//@RootNavGraph(start = true)
+@RootNavGraph(start = true)
 @Destination
 @Composable
 fun LoginScreen(
@@ -120,7 +121,6 @@ fun LoginTextField(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
     navigator: DestinationsNavigator,
-
     ) {
     val user: String by loginViewModel.user.observeAsState(initial = "")
     val pass: String by loginViewModel.password.observeAsState(initial = "")
@@ -213,7 +213,6 @@ fun LoginTextField(
             onClick = {
                 loginViewModel.onLoginSelected()
                 navigator.navigate(BuildNavGraphDestination)
-
             },
             Modifier
                 .padding(top = 10.dp)

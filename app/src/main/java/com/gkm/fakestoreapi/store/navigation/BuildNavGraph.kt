@@ -145,6 +145,5 @@ fun BuildNavGraph() {
                 .fillMaxSize()
                 .padding(paddingValues)
         )
-
     }
 }
