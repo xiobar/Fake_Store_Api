@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,9 +39,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gkm.fakestoreapi.R
 import com.gkm.fakestoreapi.store.ui.destinations.StoreScreenDestination
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -52,9 +51,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun LoginScreen(
     navigator: DestinationsNavigator,
-    loginViewModel: LoginViewModel = viewModel()
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
-    val isLoading by loginViewModel.loading.observeAsState(initial = true)
+    val isLoading by loginViewModel.loading.observeAsState(initial = false)
+
     Box(
         Modifier
             .fillMaxSize()
@@ -208,7 +208,7 @@ fun LoginTextField(
             )
         }
     }
-    val context = LocalContext.current
+    //val context = LocalContext.current
     Box(modifier) {
         Button(
             onClick = {

@@ -81,13 +81,16 @@ dependencies {
     //livedata
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
-    //retroift
+    //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     //daggerHilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    //hiltNavigation
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //navRamcosta
     val navVersion = "1.9.54"

@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.gkm.fakestoreapi.store.data.StoreResponse
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -30,9 +31,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StoreScreen(modifier: Modifier = Modifier,
-                storeViewModel: StoreViewModel,
-                navigator: DestinationsNavigator) {
+fun StoreScreen(
+    modifier: Modifier = Modifier,
+    storeViewModel: StoreViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator,
+) {
 
     val storeList = storeViewModel.getProducts.collectAsState(emptyList())
 
