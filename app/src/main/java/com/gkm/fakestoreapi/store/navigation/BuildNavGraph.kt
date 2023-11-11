@@ -108,7 +108,7 @@ fun BuildNavGraph() {
                             ) {
                                 Icon(
                                     imageVector = it.icon,
-                                    contentDescription = it.name,
+                                    contentDescription = stringResource(id = it.label),
                                     tint = MaterialTheme.colorScheme.primary
                                 )
                             }

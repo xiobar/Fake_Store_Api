@@ -1,6 +1,6 @@
 package com.gkm.fakestoreapi.store.network
 
-import android.util.Log
+import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.LoginRequest
 import com.gkm.fakestoreapi.store.data.LoginResponse
 import com.gkm.fakestoreapi.store.data.StoreResponse
@@ -13,25 +13,28 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
     //private val retrofit = RetorfitRes()
 
     suspend fun getListStore(): List<StoreResponse> {
-        return try {
-            withContext(Dispatchers.IO) {
-                val call = apiServices.getStoreProducts()
+        return withContext(Dispatchers.IO) {
+            val call = apiServices.getStoreProducts()
+            if (call.isSuccessful) {
                 call.body() ?: emptyList()
+            } else {
+                throw LogException("Error en la listado. Código: ${call.code()}")
+                //emptyList()
             }
-        }catch (e:Exception){
-            Log.i("ErrorConnect", "Error al conectar: $e")
-            emptyList()
         }
     }
 
-    suspend fun getLogin(user:String, password:String):LoginResponse{
-        return try{
-            withContext(Dispatchers.IO){
-                val response = apiServices.getLogin(LoginRequest(user, password))
-                response.body()?:LoginResponse("")
+    suspend fun getLogin(user: String, password: String): LoginResponse {
+
+        return withContext(Dispatchers.IO) {
+            val response = apiServices.getLogin(LoginRequest(user, password))
+            if (response.isSuccessful) {
+                response.body() ?: LoginResponse("")
+            } else {
+                throw LogException("Error en la solicitud de inicio de sesion. Código: ${response.code()}")
             }
-        }catch (e:Exception){
-            throw e
+
         }
     }
+
 }

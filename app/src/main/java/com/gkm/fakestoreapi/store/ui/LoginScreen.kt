@@ -33,25 +33,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.gkm.fakestoreapi.R
-import com.gkm.fakestoreapi.store.destinations.BuildNavGraphDestination
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@RootNavGraph(start = true)
 @Destination
 @Composable
 fun LoginScreen(
-    navigator: DestinationsNavigator,
-    loginViewModel: LoginViewModel = hiltViewModel()
+    loginViewModel: LoginViewModel
 ) {
     val isLoading by loginViewModel.loading.observeAsState(initial = false)
 
@@ -75,8 +70,7 @@ fun LoginScreen(
                     Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    loginViewModel,
-                    navigator
+                    loginViewModel
                 )
                 Foot(
                     Modifier
@@ -106,11 +100,10 @@ fun Foot(modifier: Modifier) {
 fun Body(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
-    navigator: DestinationsNavigator
 ) {
     Box(modifier.fillMaxWidth()) {
         Column(Modifier.align(Alignment.Center)) {
-            LoginTextField(Modifier.fillMaxWidth(), loginViewModel, navigator)
+            LoginTextField(Modifier.fillMaxWidth(), loginViewModel)
         }
     }
 }
@@ -120,7 +113,6 @@ fun Body(
 fun LoginTextField(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
-    navigator: DestinationsNavigator,
     ) {
     val user: String by loginViewModel.user.observeAsState(initial = "")
     val pass: String by loginViewModel.password.observeAsState(initial = "")
@@ -155,14 +147,19 @@ fun LoginTextField(
                 text = "Usuario",
                 color = Color(0xFF757575),
             )
-        }
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Next
+        )
     )
 
     OutlinedTextField(
         value = pass,
         onValueChange = { loginViewModel.loginChanged(user = user, password = it) },
         maxLines = 1,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done),
         modifier = modifier,
         singleLine = true,
         label = {
@@ -212,7 +209,6 @@ fun LoginTextField(
         Button(
             onClick = {
                 loginViewModel.onLoginSelected()
-                navigator.navigate(BuildNavGraphDestination)
             },
             Modifier
                 .padding(top = 10.dp)

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -27,6 +28,9 @@ class LoginViewModel @Inject constructor(
     private val _loading = MutableLiveData<Boolean>()
     val loading:LiveData<Boolean> = _loading
 
+    private val _isLoggedIn = MutableLiveData<Boolean>()
+    val isLoggedIn:LiveData<Boolean> = _isLoggedIn
+
     fun loginChanged(user:String, password:String){
         _user.value = user
         _password.value = password
@@ -37,17 +41,21 @@ class LoginViewModel @Inject constructor(
         return user.length >= 4 && password.length >= 4
     }
 
+    private fun correctLogin(login:Boolean):Boolean{
+        _isLoggedIn.value = login
+        return login
+    }
+
     fun onLoginSelected(){
         viewModelScope.launch {
             _loading.value = true
-
             try{
                 val result = loginUseCase(user.value!!, password.value!!)
-                if(result.token.toBoolean()){
-                    Log.i("correct","result ok")
-                }
-            }catch (e:Exception){
+                Log.i("correct","result ok ${result.token}")
+                correctLogin(true)
+            }catch (e:LogException){
                 Log.e("Error", "Error de login", e)
+                correctLogin(false)
             }finally {
                 _loading.value = false
             }

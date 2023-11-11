@@ -3,6 +3,7 @@ package com.gkm.fakestoreapi.store.ui
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.StoreResponse
 import com.gkm.fakestoreapi.store.data.StoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +27,7 @@ class StoreViewModel @Inject constructor(
             try {
                 val products = storeUseCase()
                 _getProducts.value = products
-            } catch (e: Exception) {
+            } catch (e: LogException) {
                 Log.e("ErrorList", "Error al obtener el listado: ", e)
             }
         }

@@ -6,4 +6,8 @@
     <string name="store">Store</string>
     <string name="home">Home</string>
     <string name="setting">Setting</string>
+    <string name="client">Client</string>
+    <string name="product">Product</string>
+    <string name="revenue">Revenue</string>
+    <string name="statistics">Statistics</string>
 </resources>
