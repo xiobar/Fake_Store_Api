@@ -45,7 +45,7 @@ fun StoreScreen(
 
     Scaffold(modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(text = "Store") },
+            TopAppBar(title = { Text(text = "Productos") },
                 navigationIcon = { Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "back",
@@ -79,10 +79,16 @@ fun StoreCard(store:StoreResponse){
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
         )) {
-        Text(text = store.codigo.toString())
-        Text(text = store.titulo)
-        Text(text = store.descripcion)
-        Text(text = store.precio.toString())
-        Text(text = store.categoria)
+        Text(text = store.id)
+        Text(text = store.code)
+        Text(text = store.name)
+        Text(text = store.mark)
+        Text(text = store.packing)
+        Text(text = store.stock)
+        Text(text = store.cost.toString())
+        Text(text = store.price.toString())
+        Text(text = store.factor.toString())
+        Text(text = store.index)
+        Text(text = store.image)
     }
 }

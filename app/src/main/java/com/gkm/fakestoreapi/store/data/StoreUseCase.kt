@@ -6,7 +6,7 @@ class StoreUseCase @Inject constructor(private val repository: StoreRepository){
 
     //private val repository = StoreRepository()
 
-    suspend operator fun invoke():List<StoreResponse>{
-        return repository.getStore()
+    suspend operator fun invoke(token:String):List<StoreResponse>{
+        return repository.getStore(token)
     }
 }

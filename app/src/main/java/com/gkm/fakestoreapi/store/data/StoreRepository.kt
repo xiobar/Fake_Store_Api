@@ -7,7 +7,7 @@ class StoreRepository @Inject constructor(private val api:UseRetrofit){
 
     //private val api = UseRetrofit()
 
-    suspend fun getStore():List<StoreResponse>{
-        return api.getListStore()
+    suspend fun getStore(token:String):List<StoreResponse>{
+        return api.getListStore(token)
     }
 }

@@ -16,7 +16,7 @@ class StoreService {
     @Provides
     fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.com/")
+            .baseUrl("http://192.168.1.46:8444/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

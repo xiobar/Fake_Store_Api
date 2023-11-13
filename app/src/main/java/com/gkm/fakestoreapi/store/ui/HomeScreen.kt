@@ -17,9 +17,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -190,6 +190,7 @@ fun HeaderHome(modifier: Modifier) {
             topEnd = ZeroCornerSize,
             bottomEnd = ZeroCornerSize
         ),
+        shadowElevation = 10.dp,
         modifier = modifier
             .fillMaxSize()
     ) {

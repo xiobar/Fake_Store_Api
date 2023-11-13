@@ -12,9 +12,9 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
 
     //private val retrofit = RetorfitRes()
 
-    suspend fun getListStore(): List<StoreResponse> {
+    suspend fun getListStore(token:String): List<StoreResponse> {
         return withContext(Dispatchers.IO) {
-            val call = apiServices.getStoreProducts()
+            val call = apiServices.getStoreProducts(token)
             if (call.isSuccessful) {
                 call.body() ?: emptyList()
             } else {
@@ -29,7 +29,7 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
         return withContext(Dispatchers.IO) {
             val response = apiServices.getLogin(LoginRequest(user, password))
             if (response.isSuccessful) {
-                response.body() ?: LoginResponse("")
+                response.body() ?: LoginResponse("","","")
             } else {
                 throw LogException("Error en la solicitud de inicio de sesion. Código: ${response.code()}")
             }
