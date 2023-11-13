@@ -23,7 +23,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gkm.fakestoreapi.R
-import com.gkm.fakestoreapi.store.preference.UserAndPassword
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -116,9 +114,8 @@ fun LoginTextField(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
     ) {
-    val userAndPassword:UserAndPassword? by loginViewModel.userAndPassword.collectAsState(initial = null)
-    val user: String by loginViewModel.user.observeAsState(initial = "${userAndPassword?.user}")
-    val pass: String by loginViewModel.password.observeAsState(initial = "${userAndPassword?.password}")
+    val user: String by loginViewModel.user.observeAsState(initial = "")
+    val pass: String by loginViewModel.password.observeAsState(initial = "")
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
     }
