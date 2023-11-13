@@ -92,6 +92,9 @@ dependencies {
     //hiltNavigation
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
+    //dataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
     //navRamcosta
     /*val navVersion = "1.9.54"
     implementation("io.github.raamcosta.compose-destinations:core:$navVersion")

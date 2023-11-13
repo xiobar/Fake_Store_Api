@@ -7,13 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.LoginUseCase
+import com.gkm.fakestoreapi.store.preference.PreferenceManager
+import com.gkm.fakestoreapi.store.preference.UserAndPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val preferenceManager: PreferenceManager
 ): ViewModel() {
 
     private val _user = MutableLiveData<String>()
@@ -30,6 +35,8 @@ class LoginViewModel @Inject constructor(
 
     private val _isLoggedIn = MutableLiveData<Boolean>()
     val isLoggedIn:LiveData<Boolean> = _isLoggedIn
+
+    val userAndPassword:Flow<UserAndPassword?> = preferenceManager.userAndPassword
 
     fun loginChanged(user:String, password:String){
         _user.value = user
@@ -51,6 +58,7 @@ class LoginViewModel @Inject constructor(
             _loading.value = true
             try{
                 val result = loginUseCase(user.value!!, password.value!!)
+                preferenceManager.saveUserAndPassword(user.value.toString(),password.value.toString())
                 Log.i("correct","result ok ${result.token}")
                 correctLogin(true)
             }catch (e:LogException){
