@@ -25,7 +25,7 @@ class StoreViewModel @Inject constructor(
     fun listProducts() {
         viewModelScope.launch {
             try {
-                val products = storeUseCase()
+                val products = storeUseCase(token = "")
                 _getProducts.value = products
             } catch (e: LogException) {
                 Log.e("ErrorList", "Error al obtener el listado: ", e)

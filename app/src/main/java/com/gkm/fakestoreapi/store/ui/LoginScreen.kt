@@ -23,6 +23,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +47,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
 ) {
     val isLoading by loginViewModel.loading.observeAsState(initial = false)
 
@@ -113,8 +114,9 @@ fun Body(
 fun LoginTextField(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
-    ) {
-    val user: String by loginViewModel.user.observeAsState(initial = "")
+) {
+    val name by loginViewModel.readName.collectAsState()
+    val user: String by loginViewModel.user.observeAsState(initial = name)
     val pass: String by loginViewModel.password.observeAsState(initial = "")
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
@@ -137,8 +139,11 @@ fun LoginTextField(
     val loginButton by loginViewModel.loginButton.observeAsState(initial = false)
     //val showToast by loginViewModel.showToast.observeAsState(initial = "")
 
-    OutlinedTextField(value = user,
-        onValueChange = { loginViewModel.loginChanged(user = it, password = pass) },
+    OutlinedTextField(
+        value = user,
+        onValueChange = {
+            loginViewModel.loginChanged(user = it, password = pass)
+        },
         maxLines = 1,
         modifier = modifier,
         singleLine = true,
@@ -155,11 +160,14 @@ fun LoginTextField(
 
     OutlinedTextField(
         value = pass,
-        onValueChange = { loginViewModel.loginChanged(user = user, password = it) },
+        onValueChange = {
+            loginViewModel.loginChanged(user = user, password = it)
+        },
         maxLines = 1,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done),
+            imeAction = ImeAction.Done
+        ),
         modifier = modifier,
         singleLine = true,
         label = {
@@ -209,6 +217,9 @@ fun LoginTextField(
         Button(
             onClick = {
                 loginViewModel.onLoginSelected()
+                if (remember) {
+                    loginViewModel.saveName(user, pass)
+                }
             },
             Modifier
                 .padding(top = 10.dp)

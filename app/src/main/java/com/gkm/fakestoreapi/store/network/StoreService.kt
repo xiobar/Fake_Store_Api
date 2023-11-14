@@ -16,7 +16,7 @@ class StoreService {
     @Provides
     fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.46:8444/")
+            .baseUrl("http://186.68.94.114:8444/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -27,3 +27,6 @@ class StoreService {
         return retrofit.create(ApiServices::class.java)
     }
 }
+
+//url:http://186.68.94.114:8444/ publico
+//url:http://192.168.1.46:8444/ interno

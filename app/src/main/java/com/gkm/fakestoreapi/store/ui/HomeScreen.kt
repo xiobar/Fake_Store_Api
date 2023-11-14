@@ -22,6 +22,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.gkm.fakestoreapi.R
 import com.gkm.fakestoreapi.store.ui.home.navCard.NavigationCard
 import com.ramcosta.composedestinations.annotation.Destination
@@ -42,7 +45,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun HomeScreen(navigator: DestinationsNavigator) {
+fun HomeScreen(navigator: DestinationsNavigator, loginViewModel: LoginViewModel = hiltViewModel()) {
     Column(modifier = Modifier.fillMaxSize()) {
         Surface(
             modifier = Modifier
@@ -51,7 +54,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             color = MaterialTheme.colorScheme.background
         ) {
             Column {
-                HeaderHome(modifier = Modifier.weight(0.6f))
+                HeaderHome(modifier = Modifier.weight(0.6f), loginViewModel)
                 FooterHome(modifier = Modifier.weight(1f), navigator)
             }
         }
@@ -182,7 +185,8 @@ fun OptionsDesigns(modifier: Modifier, image: Int, name: Int) {
 }
 
 @Composable
-fun HeaderHome(modifier: Modifier) {
+fun HeaderHome(modifier: Modifier, loginViewModel:LoginViewModel) {
+    val user by loginViewModel.readName.collectAsState()
     Surface(
         color = MaterialTheme.colorScheme.tertiary,
         shape = RoundedCornerShape(60.dp).copy(
@@ -211,7 +215,7 @@ fun HeaderHome(modifier: Modifier) {
                 )
                 {
                     Text(
-                        text = "Hola David !",
+                        text = "Hola $user !",
                         fontSize = 25.sp,
                         color = MaterialTheme.colorScheme.surface,
                         fontWeight = FontWeight.Bold,
