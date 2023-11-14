@@ -115,14 +115,15 @@ fun LoginTextField(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
 ) {
-    val name by loginViewModel.readName.collectAsState()
-    val user: String by loginViewModel.user.observeAsState(initial = name)
-    val pass: String by loginViewModel.password.observeAsState(initial = "")
+    val rememberUser by loginViewModel.readName.collectAsState()
+    val rememberPass by loginViewModel.readPass.collectAsState()
+    val user: String by loginViewModel.user.observeAsState(initial = rememberUser)
+    val pass: String by loginViewModel.password.observeAsState(initial = rememberPass)
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
     }
     var remember by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     val icon: (@Composable () -> Unit)? =
         if (remember) {

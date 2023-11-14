@@ -14,16 +14,22 @@ class PreferenceDataStore @Inject constructor(
 ) {
     private object DataStoreKeys{
         const val NAME_KEY = "NAME_KEY"
+        const val PASS_KEY = "PASS_KEY"
         val nameKey = stringPreferencesKey(NAME_KEY)
+        val passKey = stringPreferencesKey(PASS_KEY)
     }
 
-    suspend fun saveName(name:String){
+    suspend fun saveName(name:String, password:String){
         dataStore.edit {preferences->
             preferences[DataStoreKeys.nameKey] = name
+            preferences[DataStoreKeys.passKey] = password
         }
     }
 
     val readName: Flow<String> = dataStore.data.map { preferences ->
         preferences[DataStoreKeys.nameKey]?:""
+    }
+    val readPass: Flow<String> = dataStore.data.map { preferences ->
+        preferences[DataStoreKeys.passKey]?:""
     }
 }

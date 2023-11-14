@@ -42,6 +42,13 @@ class LoginViewModel @Inject constructor(
         initialValue = ""
     )
 
+    val readPass: StateFlow<String> = data.readPass.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = ""
+    )
+
+
     fun loginChanged(user: String, password: String) {
         _user.value = user
         _password.value = password
@@ -58,8 +65,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun saveName(name: String, password: String) = viewModelScope.launch {
-        data.saveName(name)
-        data.saveName(password)
+        data.saveName(name,password)
     }
 
     fun onLoginSelected() {
@@ -68,7 +74,6 @@ class LoginViewModel @Inject constructor(
             try {
                 val result = loginUseCase(user.value!!, password.value!!)
                 Log.i("correct", "result ok ${result.token}")
-                Log.i("remember", "Token ${readName.value}")
                 correctLogin(true)
             } catch (e: LogException) {
                 Log.e("Error", "Error de login", e)
