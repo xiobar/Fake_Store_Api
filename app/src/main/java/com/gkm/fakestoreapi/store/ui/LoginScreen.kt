@@ -14,10 +14,12 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -47,7 +49,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel,
+    loginViewModel: LoginViewModel ,
 ) {
     val isLoading by loginViewModel.loading.observeAsState(initial = false)
 
@@ -117,8 +119,18 @@ fun LoginTextField(
 ) {
     val rememberUser by loginViewModel.readName.collectAsState()
     val rememberPass by loginViewModel.readPass.collectAsState()
-    val user: String by loginViewModel.user.observeAsState(initial = rememberUser)
-    val pass: String by loginViewModel.password.observeAsState(initial = rememberPass)
+    val user: String by loginViewModel.user.observeAsState(initial = "")
+    val pass: String by loginViewModel.password.observeAsState(initial = "")
+    val userPref = if(rememberUser.isNotEmpty()){
+        rememberUser
+    }else{
+        user
+    }
+    val passPref = if(rememberPass.isNotEmpty()){
+        rememberPass
+    }else{
+        pass
+    }
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
     }
@@ -141,9 +153,9 @@ fun LoginTextField(
     //val showToast by loginViewModel.showToast.observeAsState(initial = "")
 
     OutlinedTextField(
-        value = user,
+        value = userPref,
         onValueChange = {
-            loginViewModel.loginChanged(user = it, password = pass)
+            loginViewModel.loginChanged(user = it, password = passPref)
         },
         maxLines = 1,
         modifier = modifier,
@@ -151,7 +163,6 @@ fun LoginTextField(
         label = {
             Text(
                 text = "Usuario",
-                color = Color(0xFF757575),
             )
         },
         keyboardOptions = KeyboardOptions.Default.copy(
@@ -160,9 +171,9 @@ fun LoginTextField(
     )
 
     OutlinedTextField(
-        value = pass,
+        value = passPref,
         onValueChange = {
-            loginViewModel.loginChanged(user = user, password = it)
+            loginViewModel.loginChanged(user = userPref, password = it)
         },
         maxLines = 1,
         keyboardOptions = KeyboardOptions.Default.copy(
@@ -173,8 +184,7 @@ fun LoginTextField(
         singleLine = true,
         label = {
             Text(
-                text = "Password",
-                color = Color(0xFF757575)
+                text = "Password"
             )
         },
         trailingIcon = {
@@ -207,8 +217,8 @@ fun LoginTextField(
                 modifier = Modifier.padding(start = 10.dp),
                 thumbContent = icon,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = Color(0xFF3F51B5)
+                    checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary
                 )
             )
         }
@@ -219,13 +229,14 @@ fun LoginTextField(
             onClick = {
                 loginViewModel.onLoginSelected()
                 if (remember) {
-                    loginViewModel.saveName(user, pass)
+                    loginViewModel.saveName(userPref, passPref)
                 }
             },
             Modifier
                 .padding(top = 10.dp)
                 .align(Alignment.Center),
-            enabled = loginButton
+            enabled = loginButton,
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
         )
         {
             Text(text = "INGRESAR")

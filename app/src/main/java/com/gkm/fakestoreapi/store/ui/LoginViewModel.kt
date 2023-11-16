@@ -56,7 +56,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun enableLogin(user: String, password: String): Boolean {
-        return user.length >= 4 && password.length >= 4
+        return (user.length >= 4 && password.length >= 4)
     }
 
     private fun correctLogin(login: Boolean): Boolean {
