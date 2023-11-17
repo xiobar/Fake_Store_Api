@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.LoginUseCase
 import com.gkm.fakestoreapi.store.preference.PreferenceDataStore
+import com.gkm.fakestoreapi.store.preference.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,8 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val data: PreferenceDataStore,
+    private val dataStore: PreferenceDataStore,
 ) : ViewModel() {
+
 
     private val _user = MutableLiveData<String>()
     val user: LiveData<String> = _user
@@ -36,18 +38,17 @@ class LoginViewModel @Inject constructor(
     private val _isLoggedIn = MutableLiveData<Boolean>()
     val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
-    val readName: StateFlow<String> = data.readName.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = ""
-    )
+    val readCredential: StateFlow<UserCredentials> =
+        dataStore.readCredentials.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UserCredentials("", "", false)
+        )
 
-    val readPass: StateFlow<String> = data.readPass.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = ""
-    )
-
+    fun saveCredentials(name: String, password: String, saveSwitch: Boolean) =
+        viewModelScope.launch {
+            dataStore.saveCredentials(name, password, saveSwitch)
+        }
 
     fun loginChanged(user: String, password: String) {
         _user.value = user
@@ -64,9 +65,6 @@ class LoginViewModel @Inject constructor(
         return login
     }
 
-    fun saveName(name: String, password: String) = viewModelScope.launch {
-        data.saveName(name,password)
-    }
 
     fun onLoginSelected() {
         viewModelScope.launch {

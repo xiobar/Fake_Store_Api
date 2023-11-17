@@ -49,7 +49,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel ,
+    loginViewModel: LoginViewModel,
 ) {
     val isLoading by loginViewModel.loading.observeAsState(initial = false)
 
@@ -117,25 +117,25 @@ fun LoginTextField(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
 ) {
-    val rememberUser by loginViewModel.readName.collectAsState()
-    val rememberPass by loginViewModel.readPass.collectAsState()
-    val user: String by loginViewModel.user.observeAsState(initial = "")
-    val pass: String by loginViewModel.password.observeAsState(initial = "")
-    val userPref = if(rememberUser.isNotEmpty()){
-        rememberUser
-    }else{
-        user
+
+    var user: String by rememberSaveable {
+        mutableStateOf("")
     }
-    val passPref = if(rememberPass.isNotEmpty()){
-        rememberPass
-    }else{
-        pass
+    var pass: String by rememberSaveable {
+        mutableStateOf("")
     }
+
+    val credentials by loginViewModel.readCredential.collectAsState()
+    if(credentials.saveSwitch){
+        user = credentials.name
+        pass = credentials.pass
+    }
+
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
     }
     var remember by rememberSaveable {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
     val icon: (@Composable () -> Unit)? =
         if (remember) {
@@ -153,9 +153,9 @@ fun LoginTextField(
     //val showToast by loginViewModel.showToast.observeAsState(initial = "")
 
     OutlinedTextField(
-        value = userPref,
+        value = user,
         onValueChange = {
-            loginViewModel.loginChanged(user = it, password = passPref)
+            loginViewModel.loginChanged(user = it, password = pass)
         },
         maxLines = 1,
         modifier = modifier,
@@ -171,9 +171,9 @@ fun LoginTextField(
     )
 
     OutlinedTextField(
-        value = passPref,
+        value = pass,
         onValueChange = {
-            loginViewModel.loginChanged(user = userPref, password = it)
+            loginViewModel.loginChanged(user = user, password = it)
         },
         maxLines = 1,
         keyboardOptions = KeyboardOptions.Default.copy(
@@ -213,7 +213,7 @@ fun LoginTextField(
             Text(text = " Recordar credenciales:")
             Switch(
                 checked = remember,
-                onCheckedChange = { remember = !remember },
+                onCheckedChange = { remember = it },
                 modifier = Modifier.padding(start = 10.dp),
                 thumbContent = icon,
                 colors = SwitchDefaults.colors(
@@ -228,8 +228,8 @@ fun LoginTextField(
         Button(
             onClick = {
                 loginViewModel.onLoginSelected()
-                if (remember) {
-                    loginViewModel.saveName(userPref, passPref)
+                if(remember){
+                    loginViewModel.saveCredentials(user, pass, remember)
                 }
             },
             Modifier
