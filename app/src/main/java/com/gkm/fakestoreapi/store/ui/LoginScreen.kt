@@ -13,15 +13,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,6 +40,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gkm.fakestoreapi.R
+import com.gkm.fakestoreapi.store.ui.components.ButtonView
+import com.gkm.fakestoreapi.store.ui.components.SwitchView
+import com.gkm.fakestoreapi.store.ui.components.TextView
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -118,15 +117,11 @@ fun LoginTextField(
     loginViewModel: LoginViewModel,
 ) {
 
-    var user: String by rememberSaveable {
-        mutableStateOf("")
-    }
-    var pass: String by rememberSaveable {
-        mutableStateOf("")
-    }
+    val user: String by loginViewModel.user.observeAsState("")
+    val pass: String by loginViewModel.user.observeAsState(initial = "")
 
     val credentials by loginViewModel.readCredential.collectAsState()
-    if(credentials.saveSwitch){
+    if (credentials.saveSwitch) {
         user = credentials.name
         pass = credentials.pass
     }
@@ -161,7 +156,7 @@ fun LoginTextField(
         modifier = modifier,
         singleLine = true,
         label = {
-            Text(
+            TextView(
                 text = "Usuario",
             )
         },
@@ -183,7 +178,7 @@ fun LoginTextField(
         modifier = modifier,
         singleLine = true,
         label = {
-            Text(
+            TextView(
                 text = "Password"
             )
         },
@@ -210,37 +205,30 @@ fun LoginTextField(
                 .align(Alignment.CenterEnd),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = " Recordar credenciales:")
-            Switch(
-                checked = remember,
-                onCheckedChange = { remember = it },
-                modifier = Modifier.padding(start = 10.dp),
-                thumbContent = icon,
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                    checkedTrackColor = MaterialTheme.colorScheme.primary
-                )
-            )
+            TextView(text = " Recordar credenciales:")
+            SwitchView(condition = remember,
+                checked = { remember = it},
+                modifier = Modifier
+                    .padding(start = 10.dp),
+                icon = icon)
         }
     }
     //val context = LocalContext.current
     Box(modifier) {
-        Button(
-            onClick = {
+        ButtonView(
+            onClcik = {
                 loginViewModel.onLoginSelected()
-                if(remember){
+                if (remember) {
                     loginViewModel.saveCredentials(user, pass, remember)
                 }
             },
-            Modifier
+            modifier = Modifier
                 .padding(top = 10.dp)
                 .align(Alignment.Center),
-            enabled = loginButton,
-            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
+            condition = loginButton,
+            text = "INGRESAR"
         )
-        {
-            Text(text = "INGRESAR")
-        }
+
         /*if (showToast.isNotEmpty()) {
             DisposableEffect(showToast) {
                 val toast = Toast.makeText(context, showToast, Toast.LENGTH_SHORT)

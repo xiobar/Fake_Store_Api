@@ -10,14 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,13 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gkm.fakestoreapi.R
+import com.gkm.fakestoreapi.store.ui.components.OptionsDesigns
 import com.gkm.fakestoreapi.store.ui.home.navCard.NavigationCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -130,63 +125,8 @@ fun FooterHome(modifier: Modifier, navController: DestinationsNavigator) {
 }
 
 @Composable
-fun OptionsDesigns(modifier: Modifier, image: Int, name: Int) {
-    Surface(
-        modifier
-            .padding(10.dp)
-            .size(150.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shape = RoundedCornerShape(20.dp),
-        shadowElevation = 10.dp,
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .padding(10.dp)
-        ) {
-            Surface(
-                color = MaterialTheme.colorScheme.surface,
-                /*shape = CircleShape,*/
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentHeight()
-                    .size(60.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = image),
-                    contentDescription = stringResource(id = name),
-                    tint = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier
-                        .wrapContentSize(Alignment.Center)
-                        .size(40.dp)
-                )
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                Text(
-                    text = stringResource(id = name),
-                    modifier = Modifier
-                        .weight(1f),
-                    color = MaterialTheme.colorScheme.tertiary
-                )
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "arrow go",
-                    tint = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier
-                        .weight(0.3f)
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun HeaderHome(modifier: Modifier, loginViewModel:LoginViewModel) {
-    val user by loginViewModel.readName.collectAsState()
+    val user by loginViewModel.readCredential.collectAsState()
     Surface(
         color = MaterialTheme.colorScheme.tertiary,
         shape = RoundedCornerShape(60.dp).copy(
@@ -215,7 +155,7 @@ fun HeaderHome(modifier: Modifier, loginViewModel:LoginViewModel) {
                 )
                 {
                     Text(
-                        text = "Hola $user !",
+                        text = "Hola ${user.name} !",
                         fontSize = 25.sp,
                         color = MaterialTheme.colorScheme.surface,
                         fontWeight = FontWeight.Bold,
@@ -259,6 +199,6 @@ fun HeaderHome(modifier: Modifier, loginViewModel:LoginViewModel) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviHome() {
+fun PreviewHome() {
     HomeScreen(navigator = EmptyDestinationsNavigator)
 }
