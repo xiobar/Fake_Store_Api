@@ -21,7 +21,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -117,21 +116,16 @@ fun LoginTextField(
     loginViewModel: LoginViewModel,
 ) {
 
-    val user: String by loginViewModel.user.observeAsState("")
-    val pass: String by loginViewModel.user.observeAsState(initial = "")
-
-    val credentials by loginViewModel.readCredential.collectAsState()
-    if (credentials.saveSwitch) {
-        user = credentials.name
-        pass = credentials.pass
-    }
+    val user: String by loginViewModel.user.observeAsState(initial = "")
+    val pass: String by loginViewModel.password.observeAsState(initial = "")
+    val remember: Boolean by loginViewModel.switchRemember.observeAsState(false)
 
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
     }
-    var remember by rememberSaveable {
+    /*var remember by rememberSaveable {
         mutableStateOf(false)
-    }
+    }*/
     val icon: (@Composable () -> Unit)? =
         if (remember) {
             {
@@ -207,7 +201,7 @@ fun LoginTextField(
         ) {
             TextView(text = " Recordar credenciales:")
             SwitchView(condition = remember,
-                checked = { remember = it},
+                checked = { loginViewModel.switchChanged(it)},
                 modifier = Modifier
                     .padding(start = 10.dp),
                 icon = icon)
@@ -218,9 +212,6 @@ fun LoginTextField(
         ButtonView(
             onClcik = {
                 loginViewModel.onLoginSelected()
-                if (remember) {
-                    loginViewModel.saveCredentials(user, pass, remember)
-                }
             },
             modifier = Modifier
                 .padding(top = 10.dp)

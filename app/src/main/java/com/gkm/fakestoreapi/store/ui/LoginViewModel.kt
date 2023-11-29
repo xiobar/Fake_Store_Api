@@ -22,12 +22,14 @@ class LoginViewModel @Inject constructor(
     private val dataStore: PreferenceDataStore,
 ) : ViewModel() {
 
-
     private val _user = MutableLiveData<String>()
     val user: LiveData<String> = _user
 
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
+
+    private val _switchRemember = MutableLiveData<Boolean>()
+    val switchRemember:LiveData<Boolean> = _switchRemember
 
     private val _loginButton = MutableLiveData<Boolean>()
     val loginButton: LiveData<Boolean> = _loginButton
@@ -45,7 +47,7 @@ class LoginViewModel @Inject constructor(
             initialValue = UserCredentials("", "", false)
         )
 
-    fun saveCredentials(name: String, password: String, saveSwitch: Boolean) =
+    private fun saveCredentials(name: String, password: String, saveSwitch: Boolean) =
         viewModelScope.launch {
             dataStore.saveCredentials(name, password, saveSwitch)
         }
@@ -54,6 +56,10 @@ class LoginViewModel @Inject constructor(
         _user.value = user
         _password.value = password
         _loginButton.value = enableLogin(user, password)
+    }
+
+    fun switchChanged(remember:Boolean){
+        _switchRemember.value = remember
     }
 
     private fun enableLogin(user: String, password: String): Boolean {
@@ -71,6 +77,9 @@ class LoginViewModel @Inject constructor(
             _loading.value = true
             try {
                 val result = loginUseCase(user.value!!, password.value!!)
+                if(switchRemember.value!!) {
+                    saveCredentials(user.value!!, password.value!!, switchRemember.value!!)
+                }
                 Log.i("correct", "result ok ${result.token}")
                 correctLogin(true)
             } catch (e: LogException) {
