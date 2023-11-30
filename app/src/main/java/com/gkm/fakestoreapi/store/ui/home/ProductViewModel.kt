@@ -8,12 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.ProductResponse
 import com.gkm.fakestoreapi.store.data.ProductUseCase
-import com.gkm.fakestoreapi.store.preference.AuthorizateCredentials
 import com.gkm.fakestoreapi.store.preference.PreferenceDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,21 +29,18 @@ class ProductViewModel @Inject constructor(
         _searchProduct.value = searchProduct
     }
 
-    val readAuthorizade: StateFlow<AuthorizateCredentials> =
-        dataStore.readAuthorizate.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = AuthorizateCredentials("")
-        )
+
+    val token = dataStore.readCredentials
 
     fun listProducts(){
         viewModelScope.launch {
             try{
-                val products = productUseCase(token = "")
+                val products = productUseCase(token = token.toString())
                 _getProducts.value = products
-                Log.i("token", "autor token ${readAuthorizade.value.token}")
+                Log.i("token", "autor token $token")
             }catch(e:LogException){
                 Log.e("Errorlist", "Error al obtener el listado", e)
+                Log.i("token", "autor token $token")
             }
         }
     }

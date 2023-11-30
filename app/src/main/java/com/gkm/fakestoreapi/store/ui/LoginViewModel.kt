@@ -41,12 +41,6 @@ class LoginViewModel @Inject constructor(
     private val _isLoggedIn = MutableLiveData<Boolean>()
     val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
-    val readCredential: StateFlow<UserCredentials> =
-        dataStore.readCredentials.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = UserCredentials("", "", false)
-        )
     val readAuthorizade: StateFlow<AuthorizateCredentials> =
         dataStore.readAuthorizate.stateIn(
             scope = viewModelScope,
@@ -62,6 +56,13 @@ class LoginViewModel @Inject constructor(
     private fun saveAuthorizade(token:String) = viewModelScope.launch {
         dataStore.saveAuthorizate(token)
     }
+
+    val readCredential: StateFlow<UserCredentials> =
+        dataStore.readCredentials.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UserCredentials("", "", false)
+        )
 
     fun loginChanged(user: String, password: String) {
         _user.value = user
@@ -90,10 +91,10 @@ class LoginViewModel @Inject constructor(
                 val result = loginUseCase(user.value!!, password.value!!)
                 if(switchRemember.value!!) {
                     saveCredentials(user.value!!, password.value!!, switchRemember.value!!)
+                    saveAuthorizade(result.token)
                 }
-                saveAuthorizade(result.token)
                 Log.i("correct", "result ok ${result.token}")
-                Log.i("token", "autor token ${readAuthorizade.value.token}")
+                Log.i("token", "autor token ${readCredential.value.name}")
                 correctLogin(true)
             } catch (e: LogException) {
                 Log.e("Error", "Error de login", e)
