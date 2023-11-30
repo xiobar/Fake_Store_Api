@@ -3,6 +3,7 @@ package com.gkm.fakestoreapi.store.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -184,4 +185,9 @@ fun TextFieldView(
             imeAction = ImeAction.Done
         ),
     )
+}
+
+@Composable
+fun SpaceView(){
+    Spacer(modifier = Modifier.padding(vertical = 5.dp))
 }

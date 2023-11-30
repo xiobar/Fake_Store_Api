@@ -3,11 +3,11 @@ package com.gkm.fakestoreapi.store.data
 import com.gkm.fakestoreapi.store.network.UseRetrofit
 import javax.inject.Inject
 
-class StoreRepository @Inject constructor(private val api:UseRetrofit){
+class ProductRepository @Inject constructor(private val api:UseRetrofit){
 
     //private val api = UseRetrofit()
 
-    suspend fun getStore(token:String):List<StoreResponse>{
+    suspend fun getStore(token:String):List<ProductResponse>{
         return api.getListStore(token)
     }
 }

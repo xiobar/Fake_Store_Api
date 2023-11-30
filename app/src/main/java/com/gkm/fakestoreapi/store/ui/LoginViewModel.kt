@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.LoginUseCase
+import com.gkm.fakestoreapi.store.preference.AuthorizateCredentials
 import com.gkm.fakestoreapi.store.preference.PreferenceDataStore
 import com.gkm.fakestoreapi.store.preference.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,11 +47,21 @@ class LoginViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = UserCredentials("", "", false)
         )
+    val readAuthorizade: StateFlow<AuthorizateCredentials> =
+        dataStore.readAuthorizate.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = AuthorizateCredentials("")
+        )
 
     private fun saveCredentials(name: String, password: String, saveSwitch: Boolean) =
         viewModelScope.launch {
             dataStore.saveCredentials(name, password, saveSwitch)
         }
+
+    private fun saveAuthorizade(token:String) = viewModelScope.launch {
+        dataStore.saveAuthorizate(token)
+    }
 
     fun loginChanged(user: String, password: String) {
         _user.value = user
@@ -80,10 +91,13 @@ class LoginViewModel @Inject constructor(
                 if(switchRemember.value!!) {
                     saveCredentials(user.value!!, password.value!!, switchRemember.value!!)
                 }
+                saveAuthorizade(result.token)
                 Log.i("correct", "result ok ${result.token}")
+                Log.i("token", "autor token ${readAuthorizade.value.token}")
                 correctLogin(true)
             } catch (e: LogException) {
                 Log.e("Error", "Error de login", e)
+
                 correctLogin(false)
             } finally {
                 _loading.value = false

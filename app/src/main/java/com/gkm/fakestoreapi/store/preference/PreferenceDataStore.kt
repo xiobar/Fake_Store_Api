@@ -17,9 +17,11 @@ class PreferenceDataStore @Inject constructor(
         const val NAME_KEY = "NAME_KEY"
         const val PASS_KEY = "PASS_KEY"
         const val SAVE_SWITCH = "SAVE_SWITCH"
+        const val TOKEN_KEY = "TOKEN_KEY"
         val nameKey = stringPreferencesKey(NAME_KEY)
         val passKey = stringPreferencesKey(PASS_KEY)
         val saveSwitch = booleanPreferencesKey(SAVE_SWITCH)
+        val tokenKey = stringPreferencesKey(TOKEN_KEY)
     }
 
     suspend fun saveCredentials(name:String, password:String, saveSwitch:Boolean){
@@ -30,11 +32,23 @@ class PreferenceDataStore @Inject constructor(
         }
     }
 
+    suspend fun saveAuthorizate(token:String){
+        dataStore.edit { preferences ->
+            preferences[DataStoreKeys.tokenKey] = token
+        }
+    }
+
     val readCredentials: Flow<UserCredentials> = dataStore.data.map { preferences->
         UserCredentials(
             name = preferences[DataStoreKeys.nameKey] ?: "",
             pass = preferences[DataStoreKeys.passKey] ?: "",
             saveSwitch = preferences[DataStoreKeys.saveSwitch] ?: false
+        )
+    }
+
+    val readAuthorizate: Flow<AuthorizateCredentials> = dataStore.data.map { preferences ->
+        AuthorizateCredentials(
+            token = preferences[DataStoreKeys.tokenKey]?:""
         )
     }
 }

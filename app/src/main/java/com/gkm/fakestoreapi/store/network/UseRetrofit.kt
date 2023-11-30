@@ -3,7 +3,7 @@ package com.gkm.fakestoreapi.store.network
 import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.LoginRequest
 import com.gkm.fakestoreapi.store.data.LoginResponse
-import com.gkm.fakestoreapi.store.data.StoreResponse
+import com.gkm.fakestoreapi.store.data.ProductResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -12,9 +12,9 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
 
     //private val retrofit = RetorfitRes()
 
-    suspend fun getListStore(token:String): List<StoreResponse> {
+    suspend fun getListStore(token:String): List<ProductResponse> {
         return withContext(Dispatchers.IO) {
-            val call = apiServices.getStoreProducts(token)
+            val call = apiServices.getListProducts(token)
             if (call.isSuccessful) {
                 call.body() ?: emptyList()
             } else {

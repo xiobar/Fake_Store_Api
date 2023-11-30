@@ -2,7 +2,7 @@ package com.gkm.fakestoreapi.store.data
 
 import com.google.gson.annotations.SerializedName
 
-data class StoreResponse(
+data class ProductResponse(
     @SerializedName("id") val id:String,
     @SerializedName("codigo") val code:String,
     @SerializedName("nombre") val name:String,

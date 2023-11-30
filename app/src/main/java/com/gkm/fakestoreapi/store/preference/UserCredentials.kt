@@ -5,3 +5,6 @@ data class UserCredentials (
     val pass:String,
     val saveSwitch:Boolean
 )
+data class AuthorizateCredentials(
+    val token:String
+)
