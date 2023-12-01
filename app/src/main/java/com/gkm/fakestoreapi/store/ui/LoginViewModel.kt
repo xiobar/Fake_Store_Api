@@ -64,14 +64,11 @@ class LoginViewModel @Inject constructor(
             initialValue = UserCredentials("", "", false)
         )
 
-    fun loginChanged(user: String, password: String) {
+    fun loginChanged(user: String, password: String, switchRemember:Boolean = false) {
         _user.value = user
         _password.value = password
+        _switchRemember.value = switchRemember
         _loginButton.value = enableLogin(user, password)
-    }
-
-    fun switchChanged(remember:Boolean){
-        _switchRemember.value = remember
     }
 
     private fun enableLogin(user: String, password: String): Boolean {
@@ -94,7 +91,7 @@ class LoginViewModel @Inject constructor(
                     saveAuthorizade(result.token)
                 }
                 Log.i("correct", "result ok ${result.token}")
-                Log.i("token", "autor token ${readCredential.value.name}")
+                Log.i("token", "autor token ${readAuthorizade.value.token}")
                 correctLogin(true)
             } catch (e: LogException) {
                 Log.e("Error", "Error de login", e)

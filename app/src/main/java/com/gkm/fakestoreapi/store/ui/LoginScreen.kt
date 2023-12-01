@@ -201,7 +201,7 @@ fun LoginTextField(
         ) {
             TextView(text = " Recordar credenciales:")
             SwitchView(condition = remember,
-                checked = { loginViewModel.switchChanged(it)},
+                checked = { loginViewModel.loginChanged(user,pass,it)},
                 modifier = Modifier
                     .padding(start = 10.dp),
                 icon = icon)

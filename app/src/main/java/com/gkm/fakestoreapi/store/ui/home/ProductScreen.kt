@@ -35,6 +35,7 @@ fun ProductScreen(
     navigator: DestinationsNavigator,
     productViewModel: ProductViewModel = hiltViewModel(),
 ) {
+
     Scaffold(topBar = {
         TopAppBarViewBack(
             text = "Productos",
