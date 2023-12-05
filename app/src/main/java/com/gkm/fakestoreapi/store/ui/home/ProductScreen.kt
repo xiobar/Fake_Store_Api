@@ -1,6 +1,7 @@
 package com.gkm.fakestoreapi.store.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -42,7 +43,11 @@ fun ProductScreen(
     }
 
     ) { paddingValues ->
-        ListProduct(productViewModel, modifier = Modifier.padding(paddingValues))
+        Column(Modifier.padding(paddingValues)){
+            SearchProduct(modifier = Modifier, productViewModel = productViewModel)
+            ListProduct(productViewModel, modifier = Modifier)
+        }
+
     }
 }
 
@@ -60,10 +65,6 @@ fun ListProduct(productViewModel: ProductViewModel, modifier:Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        item {
-            SearchProduct(modifier = Modifier, productViewModel = productViewModel)
-        }
-
         items(productList.toList()){
             ProductCard(product = it)
         }
