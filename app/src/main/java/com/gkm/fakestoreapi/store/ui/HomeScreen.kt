@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gkm.fakestoreapi.R
 import com.gkm.fakestoreapi.store.ui.components.OptionsDesigns
-import com.gkm.fakestoreapi.store.ui.home.ProductViewModel
 import com.gkm.fakestoreapi.store.ui.home.navCard.NavigationCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -43,8 +42,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
-    loginViewModel: LoginViewModel = hiltViewModel(),
-    productViewModel: ProductViewModel = hiltViewModel()
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Surface(
@@ -54,7 +52,7 @@ fun HomeScreen(
             color = MaterialTheme.colorScheme.background
         ) {
             Column {
-                HeaderHome(modifier = Modifier.weight(0.6f), loginViewModel, productViewModel)
+                HeaderHome(modifier = Modifier.weight(0.6f), loginViewModel)
                 FooterHome(modifier = Modifier.weight(1f), navigator)
             }
         }
@@ -130,12 +128,11 @@ fun FooterHome(modifier: Modifier, navController: DestinationsNavigator) {
 }
 
 @Composable
-fun HeaderHome(modifier: Modifier,
-               loginViewModel: LoginViewModel,
-               productViewModel: ProductViewModel) {
+fun HeaderHome(
+    modifier: Modifier,
+    loginViewModel: LoginViewModel
+) {
     val user by loginViewModel.readCredential.collectAsState()
-    val token by loginViewModel.readAuthorizade.collectAsState()
-    productViewModel.setToken(token.token)
     Surface(
         color = MaterialTheme.colorScheme.tertiary,
         shape = RoundedCornerShape(60.dp).copy(
@@ -195,7 +192,7 @@ fun HeaderHome(modifier: Modifier,
                         color = MaterialTheme.colorScheme.surface
                     )
                     Text(
-                        text = "$1260.40",
+                        text = "1456,58",
                         color = MaterialTheme.colorScheme.surface,
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold

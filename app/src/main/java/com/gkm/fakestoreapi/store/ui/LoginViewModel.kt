@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.LoginUseCase
-import com.gkm.fakestoreapi.store.preference.AuthorizateCredentials
 import com.gkm.fakestoreapi.store.preference.PreferenceDataStore
 import com.gkm.fakestoreapi.store.preference.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,21 +40,22 @@ class LoginViewModel @Inject constructor(
     private val _isLoggedIn = MutableLiveData<Boolean>()
     val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
-    val readAuthorizade: StateFlow<AuthorizateCredentials> =
-        dataStore.readAuthorizate.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = AuthorizateCredentials("")
-        )
-
     private fun saveCredentials(name: String, password: String, saveSwitch: Boolean) =
         viewModelScope.launch {
             dataStore.saveCredentials(name, password, saveSwitch)
         }
 
-    private fun saveAuthorizade(token:String) = viewModelScope.launch {
+    private fun saveAuthorizade(token:String) =
+        viewModelScope.launch {
         dataStore.saveAuthorizate(token)
     }
+
+    private val readAuthorizade: StateFlow<String> =
+        dataStore.readAuthorizate.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ""
+        )
 
     val readCredential: StateFlow<UserCredentials> =
         dataStore.readCredentials.stateIn(
@@ -91,7 +91,7 @@ class LoginViewModel @Inject constructor(
                     saveAuthorizade(result.token)
                 }
                 Log.i("correct", "result ok ${result.token}")
-                Log.i("token", "autor token ${readAuthorizade.value.token}")
+                Log.i("token", "autor token ${readAuthorizade.value}")
                 correctLogin(true)
             } catch (e: LogException) {
                 Log.e("Error", "Error de login", e)

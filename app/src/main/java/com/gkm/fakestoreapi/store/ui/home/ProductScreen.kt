@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gkm.fakestoreapi.store.data.ProductResponse
-import com.gkm.fakestoreapi.store.ui.components.SpaceView
 import com.gkm.fakestoreapi.store.ui.components.TextFieldView
 import com.gkm.fakestoreapi.store.ui.components.TextView
 import com.gkm.fakestoreapi.store.ui.components.TopAppBarViewBack
@@ -40,30 +39,30 @@ fun ProductScreen(
         TopAppBarViewBack(
             text = "Productos",
             navigation = { navigator.popBackStack() })
-
     }
+
     ) { paddingValues ->
-        SearchProduct(modifier = Modifier.padding(paddingValues), productViewModel)
-        SpaceView()
-        ListProduct(productViewModel)
+        ListProduct(productViewModel, modifier = Modifier.padding(paddingValues))
     }
 }
 
 @Composable
-fun ListProduct(productViewModel: ProductViewModel) {
+fun ListProduct(productViewModel: ProductViewModel, modifier:Modifier) {
     val productList by productViewModel.getProducts.observeAsState(emptyList())
 
     LaunchedEffect(Unit){
         productViewModel.listProducts()
     }
     LazyColumn(
-        modifier = Modifier
-            .padding(vertical = 5.dp)
+        modifier = modifier
             .fillMaxWidth(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        item {
+            SearchProduct(modifier = Modifier, productViewModel = productViewModel)
+        }
 
         items(productList.toList()){
             ProductCard(product = it)

@@ -8,12 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.gkm.fakestoreapi.logError.LogException
 import com.gkm.fakestoreapi.store.data.ProductResponse
 import com.gkm.fakestoreapi.store.data.ProductUseCase
-import com.gkm.fakestoreapi.store.preference.AuthorizateCredentials
 import com.gkm.fakestoreapi.store.preference.PreferenceDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,39 +23,27 @@ class ProductViewModel @Inject constructor(
     private val _searchProduct = MutableLiveData<String>()
     val searchProduct:LiveData<String> = _searchProduct
 
-
     private val _getProducts = MutableLiveData(emptyList<ProductResponse>())
     val getProducts: LiveData<List<ProductResponse>> = _getProducts
-
-    private var tokenProduct:String = ""
-    fun setToken(token:String){
-        tokenProduct = token
-    }
-
-    private fun getToken():String{
-        return tokenProduct
-    }
 
     fun changedSearch(searchProduct:String){
         _searchProduct.value = searchProduct
     }
 
-    private val readAuthorizade: StateFlow<AuthorizateCredentials> =
-        dataStore.readAuthorizate.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = AuthorizateCredentials("")
-        )
+    private suspend fun getAuthorizationToken(): String {
+        return dataStore.readAuthorizate.first()
+    }
 
 
     fun listProducts(){
         viewModelScope.launch {
+            val token = getAuthorizationToken()
             try{
-                _getProducts.value = productUseCase(getToken())
-                Log.i("tokenp", "autor token ${getToken()}")
+                val products = productUseCase(token = "Bearer $token")
+                _getProducts.value = products
             }catch(e:LogException){
+                Log.e("Token", "Error al obtener el listado $token")
                 Log.e("Errorlist", "Error al obtener el listado", e)
-                Log.i("tokenpro", "autor token ${getToken()}")
             }
         }
     }
