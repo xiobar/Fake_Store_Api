@@ -5,8 +5,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -25,16 +27,20 @@ class PreferenceDataStore @Inject constructor(
     }
 
     suspend fun saveCredentials(name: String, password: String, saveSwitch: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[DataStoreKeys.nameKey] = name
-            preferences[DataStoreKeys.passKey] = password
-            preferences[DataStoreKeys.saveSwitch] = saveSwitch
+        withContext(Dispatchers.IO){
+            dataStore.edit { preferences ->
+                preferences[DataStoreKeys.nameKey] = name
+                preferences[DataStoreKeys.passKey] = password
+                preferences[DataStoreKeys.saveSwitch] = saveSwitch
+            }
         }
     }
 
     suspend fun saveAuthorizate(token: String) {
-        dataStore.edit { preferences ->
-            preferences[DataStoreKeys.tokenKey] = token
+        withContext(Dispatchers.IO){
+            dataStore.edit { preferences ->
+                preferences[DataStoreKeys.tokenKey] = token
+            }
         }
     }
 

@@ -26,6 +26,9 @@ class ProductViewModel @Inject constructor(
     private val _getProducts = MutableLiveData(emptyList<ProductResponse>())
     val getProducts: LiveData<List<ProductResponse>> = _getProducts
 
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
     fun changedSearch(searchProduct:String){
         _searchProduct.value = searchProduct
     }
@@ -37,6 +40,7 @@ class ProductViewModel @Inject constructor(
 
     fun listProducts(){
         viewModelScope.launch {
+            _loading.value = true
             val token = getAuthorizationToken()
             try{
                 val products = productUseCase(token = "Bearer $token")
@@ -44,6 +48,8 @@ class ProductViewModel @Inject constructor(
             }catch(e:LogException){
                 Log.e("Token", "Error al obtener el listado $token")
                 Log.e("Errorlist", "Error al obtener el listado", e)
+            }finally {
+                _loading.value = false
             }
         }
     }

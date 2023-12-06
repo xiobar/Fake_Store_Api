@@ -25,7 +25,6 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
     }
 
     suspend fun getLogin(user: String, password: String): LoginResponse {
-
         return withContext(Dispatchers.IO) {
             val response = apiServices.getLogin(LoginRequest(user, password))
             if (response.isSuccessful) {
@@ -36,5 +35,4 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
 
         }
     }
-
 }
