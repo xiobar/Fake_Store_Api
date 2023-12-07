@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiServices {
     @GET("Productos")
@@ -15,4 +16,7 @@ interface ApiServices {
 
     @POST("Login")
     suspend fun getLogin(@Body request: LoginRequest):Response<LoginResponse>
+
+    @GET("Productos/{codProducto}.jpg")
+    fun getProductoImagen(@Path("codProducto")codProducto:String):Response<ProductResponse>
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gkm.fakestoreapi.store.data.ProductResponse
@@ -29,7 +29,7 @@ import com.gkm.fakestoreapi.store.ui.components.TextView
 import com.gkm.fakestoreapi.store.ui.components.TopAppBarViewBack
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import com.skydoves.landscapist.coil.CoilImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -64,7 +64,7 @@ fun ListProduct(productViewModel: ProductViewModel, modifier: Modifier) {
     }
 
     if (loading) {
-        Box (modifier = Modifier.fillMaxSize(),contentAlignment = Alignment.Center){
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
@@ -93,17 +93,25 @@ fun ProductCard(product: ProductResponse) {
         )
     )
     {
-        TextView(text = product.id)
-        TextView(text = product.code)
-        TextView(text = product.name)
-        TextView(text = product.mark)
-        TextView(text = product.packing)
-        TextView(text = product.stock)
-        TextView(text = product.cost.toString())
-        TextView(text = product.price.toString())
-        TextView(text = product.factor.toString())
-        TextView(text = product.index)
-        TextView(text = product.image)
+        Row {
+            ImageCard(
+                imageLink = product.image,
+                modifier = Modifier
+            )
+            Column {
+                TextView(text = product.id)
+                TextView(text = product.code)
+                TextView(text = product.name)
+                TextView(text = product.mark)
+                TextView(text = product.packing)
+                TextView(text = product.stock)
+                TextView(text = product.cost.toString())
+                TextView(text = product.price.toString())
+                TextView(text = product.factor.toString())
+                TextView(text = product.index)
+                TextView(text = product.image)
+            }
+        }
     }
 }
 
@@ -120,8 +128,13 @@ fun SearchProduct(modifier: Modifier, productViewModel: ProductViewModel) {
 
 }
 
-@Preview
 @Composable
-fun PreviewProducts() {
-    ProductScreen(navigator = EmptyDestinationsNavigator)
+fun ImageCard(
+    imageLink: String,
+    modifier: Modifier
+) {
+    CoilImage(
+        imageModel = { imageLink },
+        modifier = modifier
+    )
 }

@@ -95,10 +95,8 @@ dependencies {
     //dataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-    //navRamcosta
-    /*val navVersion = "1.9.54"
-    implementation("io.github.raamcosta.compose-destinations:core:$navVersion")
-    ksp("io.github.raamcosta.compose-destinations:ksp:$navVersion")*/
+    //imageCoil
+    implementation ("com.github.skydoves:landscapist-coil:2.2.12")
 
     //navRamvosta Animation
     val navVersion="1.9.54"
