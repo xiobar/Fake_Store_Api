@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +30,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.skydoves.landscapist.coil.CoilImage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun ProductScreen(
@@ -83,7 +81,8 @@ fun ListProduct(productViewModel: ProductViewModel, modifier: Modifier) {
 }
 
 @Composable
-fun ProductCard(product: ProductResponse) {
+fun ProductCard(product: ProductResponse, productViewModel: ProductViewModel = hiltViewModel()) {
+    val image = productViewModel.getImage(product.image)
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,21 +94,17 @@ fun ProductCard(product: ProductResponse) {
     {
         Row {
             ImageCard(
-                imageLink = product.image,
+                imageLink = image,
                 modifier = Modifier
             )
             Column {
-                TextView(text = product.id)
-                TextView(text = product.code)
                 TextView(text = product.name)
+                TextView(text = product.code)
                 TextView(text = product.mark)
                 TextView(text = product.packing)
                 TextView(text = product.stock)
-                TextView(text = product.cost.toString())
                 TextView(text = product.price.toString())
-                TextView(text = product.factor.toString())
                 TextView(text = product.index)
-                TextView(text = product.image)
             }
         }
     }

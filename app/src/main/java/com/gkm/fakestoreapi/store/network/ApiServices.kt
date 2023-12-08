@@ -1,5 +1,6 @@
 package com.gkm.fakestoreapi.store.network
 
+import com.gkm.fakestoreapi.store.data.ImageResponse
 import com.gkm.fakestoreapi.store.data.LoginRequest
 import com.gkm.fakestoreapi.store.data.LoginResponse
 import com.gkm.fakestoreapi.store.data.ProductResponse
@@ -18,5 +19,5 @@ interface ApiServices {
     suspend fun getLogin(@Body request: LoginRequest):Response<LoginResponse>
 
     @GET("Productos/{codProducto}.jpg")
-    fun getProductoImagen(@Path("codProducto")codProducto:String):Response<ProductResponse>
+    fun getProductoImagen(@Path("codProducto")codProducto:String):Response<ImageResponse>
 }
