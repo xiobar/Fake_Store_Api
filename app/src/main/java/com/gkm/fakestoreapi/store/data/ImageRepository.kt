@@ -4,7 +4,7 @@ import com.gkm.fakestoreapi.store.network.UseRetrofit
 import javax.inject.Inject
 
 class ImageRepository @Inject constructor(private val api:UseRetrofit) {
-    suspend fun getImage(image:String):ImageResponse{
+    suspend fun getImage(image:String):ByteArray{
         return api.getImage(image)
     }
 }

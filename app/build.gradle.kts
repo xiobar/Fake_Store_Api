@@ -96,7 +96,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //imageCoil
-    implementation ("com.github.skydoves:landscapist-coil:2.2.12")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     //navRamvosta Animation
     val navVersion="1.9.54"

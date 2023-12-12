@@ -1,7 +1,6 @@
 package com.gkm.fakestoreapi.store.network
 
 import com.gkm.fakestoreapi.logError.LogException
-import com.gkm.fakestoreapi.store.data.ImageResponse
 import com.gkm.fakestoreapi.store.data.LoginRequest
 import com.gkm.fakestoreapi.store.data.LoginResponse
 import com.gkm.fakestoreapi.store.data.ProductResponse
@@ -37,14 +36,10 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
         }
     }
 
-    suspend fun getImage(image:String):ImageResponse{
+    suspend fun getImage(image:String):ByteArray{
         return withContext(Dispatchers.IO){
-            val response = apiServices.getProductoImagen(image)
-            if (response.isSuccessful){
-                response.body()?:ImageResponse("")
-            }else{
-                throw LogException("Error en carga de imagen : ${response.code()}")
-            }
+            val responseBody = apiServices.getProductoImagen(image).execute().body()
+            responseBody?.bytes()?:ByteArray(0)
         }
     }
 }

@@ -42,11 +42,6 @@ class ProductViewModel @Inject constructor(
         return dataStore.readAuthorizate.first()
     }
 
-    fun getImage(imageUrl:String):String{
-        _productImage.value = imageUrl
-        return _productImage.value!!
-    }
-
 
     fun listProducts(){
         viewModelScope.launch {
@@ -54,9 +49,9 @@ class ProductViewModel @Inject constructor(
             val token = getAuthorizationToken()
             try{
                 val products = productUseCase(token = "Bearer $token")
-                val image = imageUseCase(_productImage.value!!)
+                val image = imageUseCase(image = productImage.value!!)
                 _getProducts.value = products
-                _productImage.value = image.picture
+                _productImage.value = image.toString()
             }catch(e:LogException){
                 Log.e("Token", "Error al obtener el listado $token")
                 Log.e("Errorlist", "Error al obtener el listado", e)
