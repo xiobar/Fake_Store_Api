@@ -6,6 +6,7 @@ import com.gkm.fakestoreapi.store.data.LoginResponse
 import com.gkm.fakestoreapi.store.data.ProductResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import javax.inject.Inject
 
 class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
@@ -36,10 +37,17 @@ class UseRetrofit @Inject constructor(private val apiServices: ApiServices) {
         }
     }
 
-    suspend fun getImage(image:String):ByteArray{
+    suspend fun getImage(image:String):String{
         return withContext(Dispatchers.IO){
-            val responseBody = apiServices.getProductoImagen(image).execute().body()
-            responseBody?.bytes()?:ByteArray(0)
+            try{
+                val responseBody = apiServices.getProductoImagen(image).execute().body()
+                responseBody?.string()?:String()
+            }catch (e:IOException){
+                "Error al devolver la imagen: ${e.message}"
+            }catch (e:LogException){
+                "Error desconocido al acceder: ${e.message}"
+            }
+
         }
     }
 }

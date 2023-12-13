@@ -86,7 +86,7 @@ fun ListProduct(productViewModel: ProductViewModel, modifier: Modifier) {
 
 @Composable
 fun ProductCard(product: ProductResponse, productViewModel: ProductViewModel = hiltViewModel()) {
-    val image = productViewModel.productImage.observeAsState()
+    productViewModel.setImage(product.image)
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -99,9 +99,11 @@ fun ProductCard(product: ProductResponse, productViewModel: ProductViewModel = h
         Row {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(image)
+                    .data( suspend { productViewModel.listImage() } )
                     .build(),
-                contentDescription = product.name)
+                contentDescription = product.name
+            )
+
             Column {
                 TextView(text = product.name)
                 TextView(text = product.code)
